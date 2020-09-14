@@ -10,7 +10,7 @@ const SignInForm = () => {
       <Card.Body>
         <Form>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label id="my-label">Email address</Form.Label>
+            <Form.Label id="my-label">Email</Form.Label>
             <Form.Control
               id="my-from-input"
               type="email"
