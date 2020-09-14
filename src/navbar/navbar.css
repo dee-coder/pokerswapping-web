@@ -21,3 +21,22 @@
 #my-nav {
   margin-left: 40px;
 }
+
+#sign-up-btn {
+  width: auto;
+  color: #ffbb33;
+  background-color: #2c2e3e;
+  border-color: #ffbb33;
+  margin: 20px 0;
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+#sign-in-btn {
+  width: auto;
+  color: #ffbb33;
+  background-color: #2c2e3e;
+  border-color: #2c2e3e;
+  margin: 20px 0;
+  font-weight: 600;
+}

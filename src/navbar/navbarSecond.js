@@ -13,7 +13,7 @@ import brandLogo from "../images/logo.png";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 
-const NavBar = () => {
+const NavBarSecond = () => {
   return (
     <Navbar className="nav-background" expand="lg">
       <Navbar.Brand
@@ -26,21 +26,6 @@ const NavBar = () => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav id="my-nav" className="mr-auto">
-          <Nav.Link id="nav-links" href="#home">
-            Home
-          </Nav.Link>
-          <Nav.Link id="nav-links" href="#link">
-            Find Sponsors
-          </Nav.Link>
-          <Nav.Link id="nav-links" href="#link">
-            Find A Tournament
-          </Nav.Link>
-          <Nav.Link id="nav-links" href="#link">
-            Players
-          </Nav.Link>
-          <Nav.Link id="nav-links" href="#link">
-            Affiliate
-          </Nav.Link>
           <Nav.Link id="nav-links" href="#link">
             How It Works
           </Nav.Link>
@@ -56,5 +41,5 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavBarSecond;
 ////

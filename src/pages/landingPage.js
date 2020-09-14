@@ -22,7 +22,9 @@ const LandingPage = () => {
               with lot of Poker Networks.
             </span>
             <br />
-            <Button id="get-started-btn">Get Started Now</Button>
+            <Button id="find-sponsor-btn">Find Sponsors</Button>
+            <Button id="sponsor-players-btn">Sponsor Players</Button>
+
             <br />
             <span id="how-it-works-btn">How it works?</span>
           </Col>
