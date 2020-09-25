@@ -123,7 +123,7 @@ const FiltersForm = ({ network, setNetwork }) => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
-                  <Form.Label style={styles.mylabel}>Price Pool</Form.Label>
+                  <Form.Label style={styles.mylabel}>Prize Pool</Form.Label>
                   <OverlayTrigger
                     placement="right"
                     overlay={

@@ -4,5 +4,6 @@
   "signinPlayer": "http://13.233.137.175:1234/login/player",
   "signupSponsor": "http://13.233.137.175:1234/signup/sponser",
   "signupPlayer": "http://13.233.137.175:1234/signup/player",
-  "getTournamentById": "http://13.233.137.175:1234/tournaments/getTournamentById"
+  "getTournamentById": "http://13.233.137.175:1234/tournaments/getTournamentById",
+  "getRegisteringTournaments": "http://13.233.137.175:1234/tournaments/all"
 }

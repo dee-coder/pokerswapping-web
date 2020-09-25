@@ -1,26 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
 import FiltersForm from "../forms/filteresForm";
 import NavBar from "../navbar/navbar";
 import axios from "axios";
 import JsonUrl from "../apiUrl.json";
+import TournamentItem from "../components/tournamentItem";
 
 const FindATournament = () => {
   const [tournamentsList, setTournamentList] = useState([]);
-  const [network, setNetwork] = useState("");
+  const [network, setNetwork] = useState("partypoker");
   const [tournamentId, setTournamentId] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
+  useEffect(() => {
+    setShowSpinner(true);
+    axios
+      .post(JsonUrl.getRegisteringTournaments, { network: network })
+      .then((res) => {
+        console.log("Axios Response:", res);
+        setShowSpinner(false);
+        setTournamentList(res.data.tournamentlist);
+        console.log(res.data.tournamentlist);
+        setShowSpinner(false);
+      })
+      .catch((err) => {
+        console.log("Axios Error:", err);
+      });
+  }, []);
 
-  const getASpacifiMatchById = () => {
+  const getASpacifiMatchById = (e) => {
+    e.preventDefault();
     if (network === null || tournamentId === null) {
       console.log("Spacify all params.");
     } else {
+      setTournamentList([]);
       setShowSpinner(true);
       axios
         .post(JsonUrl.getTournamentById, { id: tournamentId, network: network })
         .then((res) => {
           console.log("Axios Response:", res);
           setShowSpinner(false);
+          setTournamentList([res.data.result.ActiveTournament]);
         })
         .catch((err) => {
           console.log("Axios Error:", err);
@@ -67,7 +86,7 @@ const FindATournament = () => {
 
                 <Button
                   style={styles.searchBtn}
-                  onClick={() => getASpacifiMatchById()}
+                  onClick={(e) => getASpacifiMatchById(e)}
                 >
                   {" "}
                   <i
@@ -82,6 +101,9 @@ const FindATournament = () => {
                   {showSpinner && (
                     <Spinner style={styles.spinner} animation="grow" />
                   )}
+                  {tournamentsList.map((tournament) => {
+                    return <TournamentItem obj={tournament} />;
+                  })}
                 </Col>
               </Row>
             </Col>
