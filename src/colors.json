@@ -3,5 +3,6 @@
   "highlightObject": "#ffbb33",
   "textLight": "#6f7079",
   "textDark": "#fff",
-  "textBrown": "#848484"
+  "textBrown": "#848484",
+  "lightbg": "#363840"
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Navbar,
   Nav,
@@ -12,15 +12,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import brandLogo from "../images/logo.png";
 import "./navbar.css";
 import { Link } from "react-router-dom";
+import Json from "../colors.json";
 
-const NavBar = () => {
+const NavBar = ({ active, setActive }) => {
+  const styles = {
+    activeNavItem: {
+      color: "#ffbb33",
+    },
+  };
+
   return (
     <Navbar className="nav-background" expand="lg">
-      <Navbar.Brand
-        id="nav-brand-color"
-        href="#home"
-        className="nav-brand-color"
-      >
+      <Navbar.Brand id="nav-brand-color" href="/" className="nav-brand-color">
         PokerSwapping
       </Navbar.Brand>{" "}
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -32,7 +35,7 @@ const NavBar = () => {
           <Nav.Link id="nav-links" href="#link">
             Find Sponsors
           </Nav.Link>
-          <Nav.Link id="nav-links" href="#link">
+          <Nav.Link id="nav-links" href="/findatournament">
             Find A Tournament
           </Nav.Link>
           <Nav.Link id="nav-links" href="#link">
