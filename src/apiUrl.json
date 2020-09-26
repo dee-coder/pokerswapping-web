@@ -1,9 +1,9 @@
 {
-  "baseUrl": "http://13.233.137.175:4444",
-  "signinSponsor": "http://13.233.137.175:4444/login/sponser",
-  "signinPlayer": "http://13.233.137.175:4444/login/player",
-  "signupSponsor": "http://13.233.137.175:4444/signup/sponser",
-  "signupPlayer": "http://13.233.137.175:4444/signup/player",
-  "getTournamentById": "http://13.233.137.175:4444/tournaments/getTournamentById",
-  "getRegisteringTournaments": "http://13.233.137.175:4444/tournaments/all"
+  "baseUrl": "http://13.233.137.175:3000",
+  "signinSponsor": "http://13.233.137.175:3000/login/sponser",
+  "signinPlayer": "http://13.233.137.175:3000/login/player",
+  "signupSponsor": "http://13.233.137.175:3000/signup/sponser",
+  "signupPlayer": "http://13.233.137.175:3000/signup/player",
+  "getTournamentById": "http://13.233.137.175:3000/tournaments/getTournamentById",
+  "getRegisteringTournaments": "http://13.233.137.175:3000/tournaments/all"
 }
