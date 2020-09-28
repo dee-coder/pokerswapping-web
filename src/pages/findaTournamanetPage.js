@@ -24,8 +24,14 @@ const FindATournament = () => {
         console.log(res.data.tournamentlist);
         setShowSpinner(false);
       })
-      .catch((err) => {
-        console.log("Axios Error:", err);
+      .catch((error) => {
+        if (!error.response) {
+          // network error
+          this.errorStatus = "Error: Network Error";
+        } else {
+          this.errorStatus = error.response.data.message;
+        }
+        console.log(errorStatus);
       });
   }, []);
 
