@@ -13,20 +13,31 @@ const FindATournament = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
     setShowSpinner(true);
-    axios
-      .post("https://15.206.92.119:1234/tournaments/all", {
-        network: network,
-      })
-      .then((res) => {
-        console.log("Axios Response:", res);
-        setShowSpinner(false);
-        setTournamentList(res.data.tournamentlist);
-        console.log(res.data.tournamentlist);
-        setShowSpinner(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+    fetch("https://15.206.92.119:1234/tournaments/all", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ network: network }),
+    })
+      .then((res) => res.json())
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    // axios
+    //   .post("https://15.206.92.119:1234/tournaments/all", {
+    //     network: network,
+    //   })
+    //   .then((res) => {
+    //     console.log("Axios Response:", res);
+    //     setShowSpinner(false);
+    //     setTournamentList(res.data.tournamentlist);
+    //     console.log(res.data.tournamentlist);
+    //     setShowSpinner(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }, []);
 
   const getASpacifiMatchById = (e) => {
