@@ -14,7 +14,7 @@ const FindATournament = () => {
   useEffect(() => {
     setShowSpinner(true);
     axios
-      .post("http://15.206.92.119:1234/tournaments/all", {
+      .post("https://15.206.92.119:1234/tournaments/all", {
         network: network,
       })
       .then((res) => {
