@@ -25,13 +25,7 @@ const FindATournament = () => {
         setShowSpinner(false);
       })
       .catch((error) => {
-        if (!error.response) {
-          // network error
-          this.errorStatus = "Error: Network Error";
-        } else {
-          this.errorStatus = error.response.data.message;
-        }
-        console.log(errorStatus);
+        console.log(error);
       });
   }, []);
 
