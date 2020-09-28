@@ -14,7 +14,7 @@ const FindATournament = () => {
   useEffect(() => {
     setShowSpinner(true);
 
-    fetch("https://15.206.92.119:1234/tournaments/all", {
+    fetch("http://15.206.92.119:1234/tournaments/all", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
