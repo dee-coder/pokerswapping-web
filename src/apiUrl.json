@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://15.206.92.119:1234",
+  "baseUrl": "15.206.92.119:1234",
   "signinSponsor": "/login/sponser",
   "signinPlayer": "/login/player",
   "signupSponsor": "/signup/sponser",
