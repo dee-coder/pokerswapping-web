@@ -1,9 +1,9 @@
 {
   "baseUrl": "http://15.206.92.119:1234",
-  "signinSponsor": "http://15.206.92.119:1234/login/sponser",
-  "signinPlayer": "http://15.206.92.119:1234/login/player",
-  "signupSponsor": "http://15.206.92.119:1234/signup/sponser",
-  "signupPlayer": "http://15.206.92.119:1234/signup/player",
-  "getTournamentById": "http://15.206.92.119:1234/tournaments/getTournamentById",
-  "getRegisteringTournaments": "http://15.206.92.119:1234/tournaments/all"
+  "signinSponsor": "/login/sponser",
+  "signinPlayer": "/login/player",
+  "signupSponsor": "/signup/sponser",
+  "signupPlayer": "/signup/player",
+  "getTournamentById": "/tournaments/getTournamentById",
+  "getRegisteringTournaments": "/tournaments/all"
 }

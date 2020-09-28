@@ -14,7 +14,9 @@ const FindATournament = () => {
   useEffect(() => {
     setShowSpinner(true);
     axios
-      .post(JsonUrl.getRegisteringTournaments, { network: network })
+      .post(JsonUrl.baseUrl + JsonUrl.getRegisteringTournaments, {
+        network: network,
+      })
       .then((res) => {
         console.log("Axios Response:", res);
         setShowSpinner(false);
