@@ -1,7 +1,7 @@
 {
   "name": "poker-swpping-web",
   "version": "0.1.0",
-  "proxy": "http://13.233.137.175:4444",
+  "proxy": "http://api.pokerswapping.com",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
