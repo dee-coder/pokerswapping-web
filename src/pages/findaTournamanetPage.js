@@ -15,7 +15,10 @@ const FindATournament = () => {
     setShowSpinner(true);
 
     axios
-      .post("http://api.pokerswapping.com/tournaments/all")
+      .post({
+        method: "POST",
+        url: "http://api.pokerswapping.com/tournaments/all",
+      })
       .then((res) => {
         console.log("Axios Response:", res);
         setShowSpinner(false);
