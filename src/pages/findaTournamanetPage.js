@@ -14,8 +14,14 @@ const FindATournament = () => {
   useEffect(() => {
     setShowSpinner(true);
 
+    //data
+
     axios
-      .post("http://localhost:1234/tournaments/all")
+      .post("http://api.pokerswapping.com/tournaments/all", {
+        headers: {
+          "Access-Control-Allow-Origin": true,
+        },
+      })
       .then((res) => {
         console.log("Axios Response:", res.data);
         setShowSpinner(false);
