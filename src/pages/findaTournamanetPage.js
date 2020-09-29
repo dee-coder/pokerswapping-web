@@ -15,16 +15,9 @@ const FindATournament = () => {
     setShowSpinner(true);
 
     axios
-      .post({
-        method: "POST",
-        url: "http://api.pokerswapping.com/tournaments/all",
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+      .post("http://localhost:1234/tournaments/all")
       .then((res) => {
-        console.log("Axios Response:", res);
+        console.log("Axios Response:", res.data);
         setShowSpinner(false);
         setTournamentList(res.data.tournamentlist);
         console.log(res.data.tournamentlist);
@@ -37,22 +30,22 @@ const FindATournament = () => {
 
   const getASpacifiMatchById = (e) => {
     e.preventDefault();
-    if (network === null || tournamentId === null) {
-      console.log("Spacify all params.");
-    } else {
-      setTournamentList([]);
-      setShowSpinner(true);
-      axios
-        .post(JsonUrl.getTournamentById, { id: tournamentId, network: network })
-        .then((res) => {
-          console.log("Axios Response:", res);
-          setShowSpinner(false);
-          setTournamentList([res.data.result.ActiveTournament]);
-        })
-        .catch((err) => {
-          console.log("Axios Error:", err);
-        });
-    }
+    // if (network === null || tournamentId === null) {
+    //   console.log("Spacify all params.");
+    // } else {
+    //   setTournamentList([]);
+    //   setShowSpinner(true);
+    //   axios
+    //     .post(JsonUrl.getTournamentById, { id: tournamentId, network: network })
+    //     .then((res) => {
+    //       console.log("Axios Response:", res);
+    //       setShowSpinner(false);
+    //       setTournamentList([res.data.result.ActiveTournament]);
+    //     })
+    //     .catch((err) => {
+    //       console.log("Axios Error:", err);
+    //     });
+    // }
   };
   return (
     <div>
