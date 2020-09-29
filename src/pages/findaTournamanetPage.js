@@ -18,6 +18,10 @@ const FindATournament = () => {
       .post({
         method: "POST",
         url: "http://api.pokerswapping.com/tournaments/all",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
       })
       .then((res) => {
         console.log("Axios Response:", res);
