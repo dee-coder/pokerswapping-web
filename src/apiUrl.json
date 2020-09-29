@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://pokerwebserver-env.eba-3nv3pfx2.eu-west-2.elasticbeanstalk.com",
+  "baseUrl": "https://api.pokerswapping.com",
   "signinSponsor": "/login/sponser",
   "signinPlayer": "/login/player",
   "signupSponsor": "/signup/sponser",

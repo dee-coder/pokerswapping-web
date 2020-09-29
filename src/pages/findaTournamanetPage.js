@@ -17,7 +17,7 @@ const FindATournament = () => {
     //data
 
     axios
-      .post("http://api.pokerswapping.com/tournaments/all", {
+      .post("https://api.pokerswapping.com/tournaments/all", {
         headers: {
           "Access-Control-Allow-Origin": true,
         },
