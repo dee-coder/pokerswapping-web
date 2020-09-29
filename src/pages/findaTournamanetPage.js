@@ -15,9 +15,12 @@ const FindATournament = () => {
     setShowSpinner(true);
 
     axios
-      .post("https://15.206.92.119:1234/tournaments/all", {
-        network: network,
-      })
+      .post(
+        "http://pokerwebserver-env.eba-3nv3pfx2.eu-west-2.elasticbeanstalk.com/tournaments/all",
+        {
+          network: network,
+        }
+      )
       .then((res) => {
         console.log("Axios Response:", res);
         setShowSpinner(false);
