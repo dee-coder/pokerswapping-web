@@ -13,13 +13,12 @@ const FindATournament = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   useEffect(() => {
     setShowSpinner(true);
+    setTournamentList([]);
 
     //data
 
     axios
-      .post(JsonUrl.baseUrl + JsonUrl.getRegisteringTournaments, {
-        network: network,
-      })
+      .get(JsonUrl.baseUrl + JsonUrl.getRegisteringTournaments + "/" + network)
       .then((res) => {
         console.log("Axios Response:", res.data);
         setShowSpinner(false);
