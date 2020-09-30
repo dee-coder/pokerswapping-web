@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import FiltersForm from "../forms/filteresForm";
 import NavBar from "../navbar/navbar";
 import axios from "axios";
@@ -11,6 +19,9 @@ const FindATournament = () => {
   const [network, setNetwork] = useState("partypoker");
   const [tournamentId, setTournamentId] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
+  const [noData, setNoData] = useState(false);
+
+  const [type, setType] = useState("list");
   useEffect(() => {
     setShowSpinner(true);
     setTournamentList([]);
@@ -20,16 +31,31 @@ const FindATournament = () => {
     axios
       .get(JsonUrl.baseUrl + JsonUrl.getRegisteringTournaments + "/" + network)
       .then((res) => {
-        console.log("Axios Response:", res.data);
+        //console.log("Axios Response:", res.data);
         setShowSpinner(false);
-        setTournamentList(res.data.tournamentlist);
-        console.log(res.data.tournamentlist);
+        setTournamentList(res.data.result);
+        //console.log(res.data.result);
         setShowSpinner(false);
+        if (tournamentsList.length > 0) {
+          setNoData(true);
+        } else {
+          setNoData(false);
+        }
+        console.log(noData);
       })
       .catch((error) => {
         console.log(error);
       });
   }, [network]);
+
+  function convertTimeDate(timestamp) {
+    var time_to_show = timestamp; // unix timestamp in seconds
+
+    var t = new Date(time_to_show * 1000);
+    var formatted =
+      ("0" + t.getHours()).slice(-2) + ":" + ("0" + t.getMinutes()).slice(-2);
+    return formatted;
+  }
 
   const getASpacifiMatchById = (e) => {
     e.preventDefault();
@@ -43,6 +69,7 @@ const FindATournament = () => {
         .then((res) => {
           console.log("Axios Response:", res);
           setShowSpinner(false);
+
           setTournamentList([res.data.result.ActiveTournament]);
         })
         .catch((err) => {
@@ -50,6 +77,7 @@ const FindATournament = () => {
         });
     }
   };
+
   return (
     <div>
       <Container>
@@ -61,56 +89,91 @@ const FindATournament = () => {
             </Col>
           </Row>
           <Row>
-            <Col xs={4} style={styles.filtersSection}>
-              {" "}
+            <Col xs={12}>
               <FiltersForm network={network} setNetwork={setNetwork} />
             </Col>
-            <Col xs={8} style={styles.tournamentSection}>
-              <Form style={styles.form} inline>
-                <Form.Control
-                  style={styles.basicInput}
-                  as="select"
-                  value={network}
-                  onChange={(e) => setNetwork(e.target.value)}
-                >
-                  <option value={null}>Select Network</option>
-                  <option value="fulltill">Fulltilt</option>
-                  <option value="skypoker">SkyPoker</option>
-                  <option value="888poker">888Poker</option>
-                  <option value="partypoker" selected>
-                    PartyPoker
-                  </option>
-                  <option value="pokerstars">PokerStars</option>
-                </Form.Control>
-                <Form.Control
-                  style={styles.findTournamentTitleBox}
-                  placeholder="e.g. Texas hold 'em., ID:2386389399 "
-                  onChange={(e) => setTournamentId(e.target.value)}
-                />
-
-                <Button
-                  style={styles.searchBtn}
-                  onClick={(e) => getASpacifiMatchById(e)}
-                >
-                  {" "}
-                  <i
-                    style={{ marginLeft: "5px", marginRight: "5px" }}
-                    class="fa fa-search"
-                    aria-hidden="true"
-                  ></i>
-                </Button>
-              </Form>
-              <Row>
-                <Col style={styles.listContainer}>
-                  {showSpinner && (
-                    <Spinner style={styles.spinner} animation="grow" />
-                  )}
-                  {tournamentsList.map((tournament) => {
-                    return <TournamentItem obj={tournament} />;
-                  })}
+          </Row>
+          <Row>
+            <Col lg={10}>Result</Col>
+            <Col lg={2}>
+              <Row style={{ marginBottom: "10px" }}>
+                <Col lg={6}>
+                  <span
+                    style={
+                      type === "table"
+                        ? styles.listViewTypeSelected
+                        : styles.listViewType
+                    }
+                    onClick={() => setType("table")}
+                  >
+                    <i class="fas fa-table"></i>
+                  </span>
+                </Col>
+                <Col lg={6}>
+                  <span
+                    style={
+                      type === "list"
+                        ? styles.listViewTypeSelected
+                        : styles.listViewType
+                    }
+                    onClick={() => setType("list")}
+                  >
+                    <i class="fas fa-stream"></i>
+                  </span>
                 </Col>
               </Row>
             </Col>
+          </Row>
+          <Row>
+            {/* <Form style={styles.form} inline>
+               
+              </Form> */}
+
+            <Container>
+              {showSpinner && (
+                <Spinner style={styles.spinner} animation="grow" />
+              )}
+              {noData && (
+                <h3 style={{ color: "#FFF", marginTop: "30px" }}>
+                  No Result Found.
+                </h3>
+              )}
+              {type === "table" && (
+                <Table striped bordered hover variant="dark">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Date</th>
+                      <th>Network</th>
+                      <th>Name</th>
+                      <th>Stake</th>
+                      <th>Players</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tournamentsList.map((tournament) => {
+                      return (
+                        <tr>
+                          <td>{tournament["sharkscope_id"]}</td>
+                          <td>
+                            {convertTimeDate(tournament["scheduledStartDate"])}
+                          </td>
+                          <td>{tournament["network"]}</td>
+                          <td>{tournament["name"]}</td>
+                          <td>{tournament["stake"]}</td>
+                          <td>{tournament["totalEntrants"]}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              )}
+
+              {type === "list" &&
+                tournamentsList.map((tournament) => {
+                  return <TournamentItem obj={tournament} />;
+                })}
+            </Container>
           </Row>
         </Container>
       </Container>
@@ -184,6 +247,23 @@ const styles = {
   spinner: {
     color: "#ffbb33",
     marginTop: "40px",
+  },
+  listViewType: {
+    backgroundColor: "#363840",
+    fontSize: "14px",
+    color: "#FFF",
+    padding: "10px",
+
+    borderRadius: "4px",
+    textAlign: "center",
+  },
+  listViewTypeSelected: {
+    backgroundColor: "#ffbb22",
+    fontSize: "14px",
+    color: "#FFF",
+    padding: "10px",
+    borderRadius: "4px",
+    textAlign: "center",
   },
 };
 export default FindATournament;

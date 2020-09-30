@@ -7,19 +7,19 @@ const TournamentItem = ({ obj }) => {
       <Card.Body>
         <Row>
           <Col style={{ textAlign: "left" }}>
-            <span style={styles.idBox}>#{obj["@id"]}</span>
+            <span style={styles.idBox}>#{obj["sharkscope_id"]}</span>
           </Col>
         </Row>
         <Row style={{ marginTop: "10px" }}>
           <Col style={{ textAlign: "left" }}>
             {" "}
-            <h5>{obj["@name"]}</h5>
+            <h5>{obj["name"]}</h5>
           </Col>
         </Row>
         <Row>
           <Col>
             <h6 style={{ color: "#ffbb33", textAlign: "left" }}>
-              {obj["@network"]}
+              {obj["network"]}
             </h6>
           </Col>
         </Row>

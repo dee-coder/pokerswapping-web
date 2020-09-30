@@ -29,3 +29,14 @@
 #agree-box {
   color: white;
 }
+
+@media (max-width: 414px) {
+  .myRow {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .myColumn {
+    min-width: 100%;
+  }
+}
