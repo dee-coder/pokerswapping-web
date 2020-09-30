@@ -13,40 +13,59 @@ import NavBar from "../navbar/navbar";
 import axios from "axios";
 import JsonUrl from "../apiUrl.json";
 import TournamentItem from "../components/tournamentItem";
+import "./pages.css";
 
 const FindATournament = () => {
   const [tournamentsList, setTournamentList] = useState([]);
-  const [network, setNetwork] = useState("partypoker");
+  const [network, setNetwork] = useState([
+    { name: "partypoker", key: "1" },
+    { name: "skypoker", key: "2" },
+    { name: "888poker", key: "3" },
+    { name: "pokerstars", key: "4" },
+    { name: "fullfilt", key: "5" },
+  ]);
+  const [selectedNetwork, setSelectedNetwork] = useState([
+    { name: "partypoker", key: "1" },
+  ]);
+
   const [tournamentId, setTournamentId] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [noData, setNoData] = useState(false);
 
   const [type, setType] = useState("list");
+  var urlNetwork =
+    JsonUrl.baseUrl + JsonUrl.getTournamentFromSpacificNetwork + "?";
   useEffect(() => {
     setShowSpinner(true);
     setTournamentList([]);
 
     //data
 
+    for (var i = 0; i < selectedNetwork.length; i++) {
+      urlNetwork = urlNetwork + "networks=" + selectedNetwork[i].name + "&";
+    }
+    console.log(urlNetwork);
+
     axios
-      .get(JsonUrl.baseUrl + JsonUrl.getRegisteringTournaments + "/" + network)
+      .get(urlNetwork)
       .then((res) => {
         //console.log("Axios Response:", res.data);
         setShowSpinner(false);
+
         setTournamentList(res.data.result);
         //console.log(res.data.result);
         setShowSpinner(false);
         if (tournamentsList.length > 0) {
-          setNoData(true);
-        } else {
           setNoData(false);
+        } else {
+          setNoData(true);
         }
         console.log(noData);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [network]);
+  }, [selectedNetwork]);
 
   function convertTimeDate(timestamp) {
     var time_to_show = timestamp; // unix timestamp in seconds
@@ -90,38 +109,43 @@ const FindATournament = () => {
           </Row>
           <Row>
             <Col xs={12}>
-              <FiltersForm network={network} setNetwork={setNetwork} />
+              <FiltersForm
+                network={network}
+                setNetwork={setNetwork}
+                selectedNetwork={selectedNetwork}
+                setSelectedNetwork={setSelectedNetwork}
+              />
             </Col>
           </Row>
           <Row>
-            <Col lg={10}>Result</Col>
+            <Col lg={10}>
+              <span style={styles.resultFoundTag}>
+                {" "}
+                {tournamentsList.length} Tournaments found
+              </span>
+            </Col>
             <Col lg={2}>
-              <Row style={{ marginBottom: "10px" }}>
-                <Col lg={6}>
-                  <span
-                    style={
-                      type === "table"
-                        ? styles.listViewTypeSelected
-                        : styles.listViewType
-                    }
-                    onClick={() => setType("table")}
-                  >
-                    <i class="fas fa-table"></i>
-                  </span>
-                </Col>
-                <Col lg={6}>
-                  <span
-                    style={
-                      type === "list"
-                        ? styles.listViewTypeSelected
-                        : styles.listViewType
-                    }
-                    onClick={() => setType("list")}
-                  >
-                    <i class="fas fa-stream"></i>
-                  </span>
-                </Col>
-              </Row>
+              <button
+                style={
+                  type === "table"
+                    ? styles.listViewTypeSelected
+                    : styles.listViewType
+                }
+                onClick={() => setType("table")}
+              >
+                <i class="fas fa-table"></i>
+              </button>
+
+              <button
+                style={
+                  type === "list"
+                    ? styles.listViewTypeSelected
+                    : styles.listViewType
+                }
+                onClick={() => setType("list")}
+              >
+                <i class="fas fa-stream"></i>
+              </button>
             </Col>
           </Row>
           <Row>
@@ -129,7 +153,7 @@ const FindATournament = () => {
                
               </Form> */}
 
-            <Container>
+            <Container style={{ marginTop: "20px" }}>
               {showSpinner && (
                 <Spinner style={styles.spinner} animation="grow" />
               )}
@@ -252,18 +276,39 @@ const styles = {
     backgroundColor: "#363840",
     fontSize: "14px",
     color: "#FFF",
-    padding: "10px",
-
+    height: "35px",
+    width: "35px",
     borderRadius: "4px",
     textAlign: "center",
+    margin: "10px",
+    border: "1px solid #363840",
+    float: "right",
+    "&:hover": {
+      cursor: "pointer",
+    },
   },
   listViewTypeSelected: {
     backgroundColor: "#ffbb22",
     fontSize: "14px",
     color: "#FFF",
-    padding: "10px",
+    height: "35px",
+    width: "35px",
+    float: "right",
+
     borderRadius: "4px",
+    border: "1px solid #ffbb22",
+    margin: "10px",
+
     textAlign: "center",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  resultFoundTag: {
+    color: "#FFF",
+    fontSize: "18px",
+    fontWeight: "600",
   },
 };
+
 export default FindATournament;

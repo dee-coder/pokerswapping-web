@@ -34,8 +34,14 @@ const DateHolderComponent = () => {
   );
 };
 
-const FiltersForm = ({ network, setNetwork }) => {
+const FiltersForm = ({
+  network,
+  setNetwork,
+  selectedNetwork,
+  setSelectedNetwork,
+}) => {
   useEffect(() => {
+    //setSelectedNetwork([...networks,network])
     // setLayoutWidth(window.innerHeight());
     // if (layoutWidth < 600) {
     //   setRatio(12);
@@ -47,13 +53,6 @@ const FiltersForm = ({ network, setNetwork }) => {
   const [gameType, setGameType] = useState("");
   const [layoutWidth, setLayoutWidth] = useState();
   const [ratio, setRatio] = useState();
-  const [networks, setNetworks] = useState([
-    { name: "FullFilt", key: "1" },
-    { name: "PartyPoker", key: "2" },
-    { name: "PokerStars", key: "3" },
-    { name: "888Poker", key: "4" },
-    { name: "SkyPoker", key: "5" },
-  ]);
 
   const [buyIn, setBuyIn] = useState([
     {
@@ -65,14 +64,14 @@ const FiltersForm = ({ network, setNetwork }) => {
   ]);
 
   const [prizePool, setPrizePool] = useState("");
-  const [selectedNetwork, setSelectedNetwork] = useState([]);
+  //const [selectedNetwork, setSelectedNetwork] = useState([]);
   const [filters, setFilters] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
 
   const handleFilters = (filter) => {
     //console.log(filter);
-    setSelectedNetwork([...selectedNetwork, filter]);
-    setFilters([...filters, filter]);
+    // setNetwork([...selectedNetwork, filter]);
+    //setFilters([...filters, filter]);
   };
 
   const handleGameType = (type) => {
@@ -80,18 +79,13 @@ const FiltersForm = ({ network, setNetwork }) => {
   };
 
   const onSelect = (list, Item) => {
-    //console.log(Item);
     setSelectedNetwork([...selectedNetwork, Item]);
-    setFilters([...filters, Item.name]);
   };
 
   const onRemove = (list, Item) => {
-    //console.log(Item);
-    filters.splice(filters.indexOf(Item) - 1, 1);
-    selectedNetwork.splice(filters.indexOf(Item) - 1, 1);
-    setSelectedNetwork(selectedNetwork);
+    const newList = selectedNetwork.filter((item) => item.name !== Item.name);
 
-    setFilters(filters);
+    setSelectedNetwork(newList);
   };
 
   const collectAndApplyFilters = () => {
@@ -128,8 +122,9 @@ const FiltersForm = ({ network, setNetwork }) => {
               )}
             </OverlayTrigger>
             <Multiselect
-              options={networks}
+              options={network}
               displayValue="name"
+              selectedValues={selectedNetwork}
               style={{
                 searchBox: {
                   color: "#6f7079",

@@ -31,7 +31,7 @@ const TournamentItem = ({ obj }) => {
 
 const styles = {
   container: {
-    marginTop: "30px",
+    marginTop: "0px",
     marginBottom: "30px",
     marginRight: "30px",
 
