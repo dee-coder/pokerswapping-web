@@ -27,12 +27,24 @@ const FindATournament = () => {
   const [selectedNetwork, setSelectedNetwork] = useState([
     { name: "partypoker", key: "1" },
   ]);
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+
+  const [selectedFilters, setSelectedFilters] = useState([
+    { key: "scheduledStartDate", value: today },
+  ]);
 
   const [tournamentId, setTournamentId] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [noData, setNoData] = useState(false);
-
   const [type, setType] = useState("list");
+
+  const [gameType, setGameType] = useState(null);
+
   var urlNetwork =
     JsonUrl.baseUrl + JsonUrl.getTournamentFromSpacificNetwork + "?";
   useEffect(() => {
@@ -40,40 +52,66 @@ const FindATournament = () => {
     setTournamentList([]);
 
     //data
-
-    for (var i = 0; i < selectedNetwork.length; i++) {
-      urlNetwork = urlNetwork + "networks=" + selectedNetwork[i].name + "&";
-    }
-    console.log(urlNetwork);
-
-    axios
-      .get(urlNetwork)
-      .then((res) => {
-        //console.log("Axios Response:", res.data);
+    if (selectedNetwork.length == 0) {
+      setShowSpinner(false);
+      setNoData(true);
+    } else {
+      for (var i = 0; i < selectedNetwork.length; i++) {
+        urlNetwork = urlNetwork + "networks=" + selectedNetwork[i].name + "&";
+      }
+      //console.log(selectedFilters);
+      if (selectedFilters.length == 0) {
+        console.log(urlNetwork);
         setShowSpinner(false);
-
-        setTournamentList(res.data.result);
-        //console.log(res.data.result);
-        setShowSpinner(false);
-        if (tournamentsList.length > 0) {
-          setNoData(false);
-        } else {
-          setNoData(true);
+      } else {
+        for (var k = 0; k < selectedFilters.length; k++) {
+          urlNetwork =
+            urlNetwork +
+            selectedFilters[k].key +
+            "=" +
+            selectedFilters[k].value +
+            "&";
         }
-        console.log(noData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [selectedNetwork]);
+
+        console.log(urlNetwork);
+        setShowSpinner(false);
+      }
+      setShowSpinner(true);
+      axios
+        .get(urlNetwork)
+        .then((res) => {
+          //console.log("Axios Response:", res.data);
+          setShowSpinner(false);
+          if (res.data.status === "ok") {
+            setTournamentList(res.data.result);
+            setNoData(false);
+            setShowSpinner(false);
+          } else if (res.data.status === "failed") {
+            setNoData(true);
+
+            setShowSpinner(false);
+          }
+
+          // console.log(res.data.result);
+          // setShowSpinner(false);
+          // if (res.data.result === 0) {
+          //   setNoData(true);
+          // } else {
+          //   setNoData(false);
+          // }
+          //console.log(noData);
+          //console.log(Object.keys(tournamentsList).length);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [selectedNetwork, selectedFilters]);
 
   function convertTimeDate(timestamp) {
-    var time_to_show = timestamp; // unix timestamp in seconds
-
-    var t = new Date(time_to_show * 1000);
-    var formatted =
-      ("0" + t.getHours()).slice(-2) + ":" + ("0" + t.getMinutes()).slice(-2);
-    return formatted;
+    var theDate = new Date(timestamp * 1000);
+    var dateString = theDate.toGMTString();
+    return dateString;
   }
 
   const getASpacifiMatchById = (e) => {
@@ -97,6 +135,11 @@ const FindATournament = () => {
     }
   };
 
+  function toTimestamp(strDate) {
+    var datum = Date.parse(strDate);
+    return datum / 1000;
+  }
+
   return (
     <div>
       <Container>
@@ -114,6 +157,10 @@ const FindATournament = () => {
                 setNetwork={setNetwork}
                 selectedNetwork={selectedNetwork}
                 setSelectedNetwork={setSelectedNetwork}
+                gameType={gameType}
+                setGameType={setGameType}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
               />
             </Col>
           </Row>
@@ -121,7 +168,7 @@ const FindATournament = () => {
             <Col lg={10}>
               <span style={styles.resultFoundTag}>
                 {" "}
-                {tournamentsList.length} Tournaments found
+                Showing {tournamentsList.length} Tournaments
               </span>
             </Col>
             <Col lg={2}>

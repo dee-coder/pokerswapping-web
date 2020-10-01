@@ -17,8 +17,28 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./form.css";
 
-const DateHolderComponent = () => {
+const DateHolderComponent = (setSelectedFilters, selectedFilters) => {
   const [startDate, setStartDate] = useState(new Date());
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+
+  const setSelectedDate = () => {
+    //const unixDate = toTimestamp(date);
+    setSelectedFilters([
+      ...selectedFilters,
+      { key: "scheduledStartDate", value: today },
+    ]);
+    setStartDate(new Date());
+  };
+
+  function toTimestamp(strDate) {
+    var datum = Date.parse(strDate);
+    return datum / 1000;
+  }
 
   const ExampleCustomInput = ({ value, onClick }) => (
     <Button style={styles.basicInput} onClick={onClick}>
@@ -28,7 +48,7 @@ const DateHolderComponent = () => {
   return (
     <DatePicker
       selected={startDate}
-      onChange={(date) => setStartDate(date)}
+      onChange={(date) => setSelectedDate(date)}
       customInput={<ExampleCustomInput />}
     />
   );
@@ -39,6 +59,10 @@ const FiltersForm = ({
   setNetwork,
   selectedNetwork,
   setSelectedNetwork,
+  gameType,
+  setGameType,
+  selectedFilters,
+  setSelectedFilters,
 }) => {
   useEffect(() => {
     //setSelectedNetwork([...networks,network])
@@ -50,7 +74,6 @@ const FiltersForm = ({
     // }
   }, []);
 
-  const [gameType, setGameType] = useState("");
   const [layoutWidth, setLayoutWidth] = useState();
   const [ratio, setRatio] = useState();
 
@@ -63,8 +86,6 @@ const FiltersForm = ({
     },
   ]);
 
-  const [prizePool, setPrizePool] = useState("");
-  //const [selectedNetwork, setSelectedNetwork] = useState([]);
   const [filters, setFilters] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
 
@@ -90,6 +111,28 @@ const FiltersForm = ({
 
   const collectAndApplyFilters = () => {
     console.log(filters);
+  };
+
+  const setGameTypeFilter = (type) => {
+    setSelectedFilters([...selectedFilters, { key: "game", value: type }]);
+  };
+
+  const setPrizePool = (prizepool) => {
+    setSelectedFilters([
+      ...selectedFilters,
+      { key: "guarantee", value: prizepool },
+    ]);
+  };
+
+  const setTournamentState = (state) => {
+    setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  };
+
+  const setEntrants = (value) => {
+    setSelectedFilters([
+      ...selectedFilters,
+      { key: "currentEntrants", value: value },
+    ]);
   };
 
   return (
@@ -229,7 +272,11 @@ const FiltersForm = ({
               )}
             </OverlayTrigger>
 
-            <Form.Control style={styles.basicInput} as="select">
+            <Form.Control
+              style={styles.basicInput}
+              as="select"
+              onChange={(e) => setGameTypeFilter(e.target.value)}
+            >
               <option>Default select</option>
               <option value="H">Hold'em</option>
               <option value="O">Omaha</option>
@@ -263,13 +310,17 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control style={styles.basicInput} as="select">
+            <Form.Control
+              style={styles.basicInput}
+              as="select"
+              onChange={(e) => setPrizePool(e.target.value)}
+            >
               <option>Default select</option>
-              <option>$0 To $100</option>
-              <option>$100 To $1000</option>
-              <option>$1000 To $5000</option>
-              <option>$5000 To $25000</option>
-              <option>$25000 To $100000</option>
+              <option value="100">$0 To $100</option>
+              <option value="1000">$100 To $1000</option>
+              <option value="5000">$1000 To $5000</option>
+              <option value="25000">$5000 To $25000</option>
+              <option value="100000">$25000 To $100000</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -333,12 +384,16 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control style={styles.basicInput} as="select">
+            <Form.Control
+              style={styles.basicInput}
+              as="select"
+              onChange={(e) => setTournamentState(e.target.value)}
+            >
               <option>Select State</option>
-              <option>Registering</option>
-              <option>Late Registering</option>
-              <option>Running</option>
-              <option>Completed</option>
+              <option value="Registering">Registering</option>
+              <option value="Late Registering">Late Registering</option>
+              <option value="Running">Running</option>
+              <option value="Completed">Completed</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -368,13 +423,17 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control style={styles.basicInput} as="select">
+            <Form.Control
+              style={styles.basicInput}
+              as="select"
+              onChange={(e) => setEntrants(e.target.value)}
+            >
               <option>Select</option>
-              <option>10 - 50</option>
-              <option>50 - 100</option>
-              <option>100 - 200</option>
-              <option>100 - 500</option>
-              <option>500 - 1000</option>
+              <option value="50">10 - 50</option>
+              <option value="100">50 - 100</option>
+              <option value="200">100 - 200</option>
+              <option value="500">100 - 500</option>
+              <option value="1000">500 - 1000</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -404,7 +463,10 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <DateHolderComponent />
+            <DateHolderComponent
+              setSelectedFilters={setSelectedFilters}
+              selectedFilters={selectedFilters}
+            />
           </Form.Group>
         </Col>
       </Row>
