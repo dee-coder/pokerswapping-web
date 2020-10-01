@@ -226,9 +226,7 @@ const FindATournament = () => {
                       return (
                         <tr>
                           <td>{tournament["sharkscope_id"]}</td>
-                          <td>
-                            {convertTimeDate(tournament["scheduledStartDate"])}
-                          </td>
+                          <td>{tournament["scheduledStartDate"]}</td>
                           <td>{tournament["network"]}</td>
                           <td>{tournament["name"]}</td>
                           <td>{tournament["stake"]}</td>
