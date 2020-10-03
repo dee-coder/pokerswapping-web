@@ -34,9 +34,8 @@ const FindATournament = () => {
 
   today = mm + "/" + dd + "/" + yyyy;
 
-  const [selectedFilters, setSelectedFilters] = useState([
-    { key: "scheduledStartDate", value: today },
-  ]);
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  //{ key: "scheduledStartDate", value: today }
 
   const [tournamentId, setTournamentId] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
@@ -240,11 +239,14 @@ const FindATournament = () => {
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Date</th>
-                      <th>Network</th>
-                      <th>Name</th>
-                      <th>Stake</th>
-                      <th>Players</th>
+                      <th>DATE</th>
+                      <th>NETWORK</th>
+                      <th>NAME</th>
+                      <th>CURRENCY</th>
+                      <th>GUARANTEE</th>
+                      <th>OVERLAY</th>
+                      <th>TOTAL ENTRANTS</th>
+                      <th>STATE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -255,8 +257,11 @@ const FindATournament = () => {
                           <td>{tournament["scheduledStartDate"]}</td>
                           <td>{tournament["network"]}</td>
                           <td>{tournament["name"]}</td>
-                          <td>{tournament["stake"]}</td>
+                          <td>{tournament["currency"]}</td>
+                          <td>{tournament["guarantee"]}</td>
+                          <td>{tournament["overlay"]}</td>
                           <td>{tournament["totalEntrants"]}</td>
+                          <td>{tournament["state"]}</td>
                         </tr>
                       );
                     })}

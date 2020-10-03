@@ -98,7 +98,6 @@ const FiltersForm = ({
     ]);
 
     setAllFilters([
-      { key: "scheduledStartDate", value: today },
       ...selectedPrizepool,
       ...selectedGameType,
       ...selectedSpeed,
