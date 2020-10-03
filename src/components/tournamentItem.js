@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Row, Col, Button, Form, FormGroup } from "react-bootstrap";
 
 const TournamentItem = ({ obj }) => {
   return (
@@ -81,6 +81,54 @@ const TournamentItem = ({ obj }) => {
             <span style={{ fontSize: "14px", fontWeight: "600" }}>
               {obj["state"]}
             </span>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col lg={12}>
+            <Form inline style={{ float: "right" }}>
+              <Button
+                style={{
+                  fontSize: "14px",
+                  color: "#FFF",
+                  fontWeight: "600",
+                  backgroundColor: "#ffbb22",
+                  border: "1px solid #ffbb22",
+                }}
+              >
+                {obj["network"]}
+                <i
+                  style={{ marginLeft: "10px" }}
+                  class="fas fa-external-link-alt"
+                ></i>
+              </Button>
+
+              <Button
+                style={{
+                  fontSize: "14px",
+                  color: "#FFF",
+                  fontWeight: "600",
+                  marginLeft: "20px",
+
+                  backgroundColor: "#ffbb22",
+                  border: "1px solid #ffbb22",
+                }}
+              >
+                {" "}
+                Get Sponsored
+              </Button>
+
+              <Button
+                style={{
+                  fontSize: "14px",
+                  color: "#FFF",
+                  fontWeight: "600",
+                  marginLeft: "20px",
+                }}
+              >
+                {" "}
+                Add To Diary
+              </Button>
+            </Form>
           </Col>
         </Row>
       </Card.Body>
