@@ -43,6 +43,15 @@ const FindATournament = () => {
   const [noData, setNoData] = useState(false);
   const [type, setType] = useState("list");
 
+  const [selectedPrizepool, setSelectedPrizePool] = useState([]);
+  const [selectedGameType, setSelectedGameType] = useState([]);
+  const [selectedSpeed, setSelectedSpeed] = useState([]);
+  const [selectedTournamentsState, setSelectedTournamentsState] = useState([]);
+  const [selectedEnrollment, setSelectedEnrollment] = useState([]);
+  const [allFilters, setAllFilters] = useState([
+    { key: "scheduledStartDate", value: today },
+  ]);
+
   const [gameType, setGameType] = useState(null);
 
   var urlNetwork =
@@ -64,13 +73,9 @@ const FindATournament = () => {
         console.log(urlNetwork);
         setShowSpinner(false);
       } else {
-        for (var k = 0; k < selectedFilters.length; k++) {
+        for (var k = 0; k < allFilters.length; k++) {
           urlNetwork =
-            urlNetwork +
-            selectedFilters[k].key +
-            "=" +
-            selectedFilters[k].value +
-            "&";
+            urlNetwork + allFilters[k].key + "=" + allFilters[k].value + "&";
         }
 
         console.log(urlNetwork);
@@ -106,7 +111,7 @@ const FindATournament = () => {
           console.log(error);
         });
     }
-  }, [selectedNetwork, selectedFilters]);
+  }, [selectedNetwork, allFilters]);
 
   function convertTimeDate(timestamp) {
     var theDate = new Date(timestamp * 1000);
@@ -147,7 +152,18 @@ const FindATournament = () => {
         <Container>
           <Row>
             <Col style={styles.findTournamentBox}>
-              <h3>Find Tournaments</h3>
+              <h3>
+                {" "}
+                <i
+                  style={{
+                    color: "#ffbb22",
+                    fontSize: "20px",
+                    marginRight: "10px",
+                  }}
+                  class="fas fa-search"
+                ></i>
+                Find Tournaments
+              </h3>
             </Col>
           </Row>
           <Row>
@@ -157,10 +173,20 @@ const FindATournament = () => {
                 setNetwork={setNetwork}
                 selectedNetwork={selectedNetwork}
                 setSelectedNetwork={setSelectedNetwork}
-                gameType={gameType}
-                setGameType={setGameType}
                 selectedFilters={selectedFilters}
                 setSelectedFilters={setSelectedFilters}
+                selectedPrizepool={selectedPrizepool}
+                setSelectedPrizePool={setSelectedPrizePool}
+                selectedGameType={selectedGameType}
+                setSelectedGameType={setSelectedGameType}
+                selectedSpeed={selectedSpeed}
+                setSelectedSpeed={setSelectedSpeed}
+                selectedTournamentsState={selectedTournamentsState}
+                setSelectedTournamentsState={setSelectedTournamentsState}
+                selectedEnrollment={selectedEnrollment}
+                setSelectedEnrollment={setSelectedEnrollment}
+                setAllFilters={setAllFilters}
+                allFilters={allFilters}
               />
             </Col>
           </Row>
@@ -197,7 +223,7 @@ const FindATournament = () => {
           </Row>
           <Row>
             {/* <Form style={styles.form} inline>
-               
+
               </Form> */}
 
             <Container style={{ marginTop: "20px" }}>

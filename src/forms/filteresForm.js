@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./form.css";
+import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 
 const DateHolderComponent = (setSelectedFilters, selectedFilters) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -59,10 +60,20 @@ const FiltersForm = ({
   setNetwork,
   selectedNetwork,
   setSelectedNetwork,
-  gameType,
-  setGameType,
   selectedFilters,
   setSelectedFilters,
+  selectedPrizepool,
+  setSelectedPrizePool,
+  selectedGameType,
+  setSelectedGameType,
+  selectedSpeed,
+  setSelectedSpeed,
+  selectedTournamentsState,
+  setSelectedTournamentsState,
+  selectedEnrollment,
+  setSelectedEnrollment,
+  allFilters,
+  setAllFilters,
 }) => {
   useEffect(() => {
     //setSelectedNetwork([...networks,network])
@@ -72,17 +83,105 @@ const FiltersForm = ({
     // } else {
     //   setRatio(6);
     // }
-  }, []);
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = mm + "/" + dd + "/" + yyyy;
+    setShowFilters([
+      ...selectedPrizepool,
+      ...selectedGameType,
+      ...selectedSpeed,
+      ...selectedTournamentsState,
+      ...selectedEnrollment,
+    ]);
+
+    setAllFilters([
+      { key: "scheduledStartDate", value: today },
+      ...selectedPrizepool,
+      ...selectedGameType,
+      ...selectedSpeed,
+      ...selectedTournamentsState,
+      ...selectedEnrollment,
+    ]);
+
+    console.log("Filters array:", showfilters);
+  }, [
+    selectedPrizepool,
+    selectedGameType,
+    selectedSpeed,
+    selectedTournamentsState,
+    selectedEnrollment,
+  ]);
 
   const [layoutWidth, setLayoutWidth] = useState();
   const [ratio, setRatio] = useState();
+  const [showfilters, setShowFilters] = useState([]);
 
-  const [buyIn, setBuyIn] = useState([
+  const [prizepool, setPrizePool] = useState([
+    { value: "BETWEEN 100 AND 500", label: "$100 To $500", key: "gaurantee" },
     {
-      name: "$10 to $100",
-      key: "1",
-      name: "$100 to $500",
-      key: "2",
+      value: " BETWEEN 500 AND 1000",
+      label: "$500 To $1000",
+      key: "gaurantee",
+    },
+    {
+      value: " BETWEEN 1000 AND 2000",
+      label: "$1000 To $2000",
+      key: "gaurantee",
+    },
+    {
+      value: " BETWEEN 2000 AND 5000",
+      label: "$2000 To $5000",
+      key: "gaurantee",
+    },
+    {
+      value: " BETWEEN 5000 AND 10000",
+      label: "$5000 To $10000",
+      key: "gaurantee",
+    },
+  ]);
+
+  const [gameType, setGameType] = useState([
+    { value: "H", label: "Hold'em", key: "game" },
+    { value: "O", label: "Omaha", key: "game" },
+  ]);
+
+  const [speed, setSpeed] = useState([
+    { value: " Turbo", label: "Turbo", key: "speed" },
+    { value: " Slow", label: "Slow", key: "speed" },
+  ]);
+
+  const [tournamentsStates, setTournamentStates] = useState([
+    { value: "Registering", label: "Registering", key: "state" },
+    { value: "Late Registering", label: "Late Registering", key: "state" },
+    { value: "Running", label: "Running", key: "state" },
+    { value: " Completed", label: "Completed", key: "state" },
+  ]);
+
+  const [enrollment, setEnrollment] = useState([
+    { label: " 10 To 50", value: "BETWEEN 10 To 50", key: "currentEntrants" },
+    { label: " 50 To 100", value: "BETWEEN 50 To 100", key: "currentEntrants" },
+    {
+      label: " 100 To 1000",
+      value: "BETWEEN 100 To 1000",
+      key: "currentEntrants",
+    },
+    {
+      label: " 1000 To 2000",
+      value: "BETWEEN 1000 To 2000",
+      key: "currentEntrants",
+    },
+    {
+      label: " 2000 To 5000",
+      value: "BETWEEN 2000 To 5000",
+      key: "currentEntrants",
+    },
+    {
+      label: " 5000 To 10000",
+      value: "BETWEEN 5000 To 10000",
+      key: "currentEntrants",
     },
   ]);
 
@@ -99,40 +198,131 @@ const FiltersForm = ({
     setFilters([...filters, type]);
   };
 
-  const onSelect = (list, Item) => {
+  //------Network-------
+  const onSelectNetwork = (list, Item) => {
+    //setSelectedPrizePool([...selectedPrizepool,Item]);
+    //setSelectedFilters([...selectedFilters,{key:'gaurantee',value:Item.name}]);
     setSelectedNetwork([...selectedNetwork, Item]);
   };
 
-  const onRemove = (list, Item) => {
-    const newList = selectedNetwork.filter((item) => item.name !== Item.name);
+  const onRemoveNetwork = (list, Item) => {
+    const newList = selectedNetwork.filter((item) => item.value !== Item.name);
 
     setSelectedNetwork(newList);
+  };
+  //------PricePool-------
+  const onSelectprizepool = (selectedArr) => {
+    console.log(selectedArr);
+    setSelectedPrizePool(selectedArr);
+    console.log(selectedPrizepool);
+    // setSelectedPrizePool([...selectedPrizepool, Item]);
+
+    //setSelectedNetwork([...selectedNetwork, Item]);
+  };
+
+  //------GameType-------
+  const onSelectGameType = (selectedArr) => {
+    setSelectedGameType(selectedArr);
+
+    //setSelectedGameType([...selectedGameType, Item]);
+    //setSelectedFilters([...selectedFilters, { key: "game", value: Item.name }]);
+    //setSelectedNetwork([...selectedNetwork, Item]);
+  };
+
+  //------Speed-------
+  const onSelectSpeed = (selectedArr) => {
+    setSelectedSpeed(selectedArr);
+
+    // setSelectedSpeed([...selectedSpeed, Item]);
+    // setSelectedFilters([
+    //   ...selectedFilters,
+    //   { key: "speed", value: Item.name },
+    // ]);
+    //setSelectedNetwork([...selectedNetwork, Item]);
+  };
+
+  //------State-------
+  const onSelectState = (selectedArr) => {
+    setSelectedTournamentsState(selectedArr);
+
+    // setSelectedState([...selectedState, Item]);
+    // setSelectedFilters([
+    //   ...selectedFilters,
+    //   { key: "state", value: Item.name },
+    // ]);
+    //setSelectedNetwork([...selectedNetwork, Item]);
+  };
+
+  //------Enrollment-------
+  const onSelectEnrollment = (selectedArr) => {
+    setSelectedEnrollment(selectedArr);
+
+    // setSelectedEnrollment([...selectedEnrollment, Item]);
+    // setSelectedFilters([
+    //   ...selectedFilters,
+    //   { key: "currentEntrants", value: Item.name },
+    // ]);
+    //setSelectedNetwork([...selectedNetwork, Item]);
   };
 
   const collectAndApplyFilters = () => {
     console.log(filters);
   };
 
-  const setGameTypeFilter = (type) => {
-    setSelectedFilters([...selectedFilters, { key: "game", value: type }]);
-  };
+  // const setGameTypeFilter = (type, e) => {
+  //   if (type === "null") {
+  //     //updateList(list);
+  //     setSelectedFilters(selectedFilters.filter(({ key }) => key !== "game"));
+  //     //const key = e.target.getAttribute("key");
+  //     //setSelectedFilters(selectedFilters.filter((item) => item.key !== "game"));
+  //     //setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  //   } else {
+  //     setSelectedFilters([...selectedFilters, { key: "game", value: type }]);
+  //   }
+  // };
+  //
+  // const setPrizePool = (prizepool, e) => {
+  //   if (prizepool === "null") {
+  //     setSelectedFilters(
+  //       selectedFilters.filter(({ key }) => key !== "guarantee")
+  //     );
+  //
+  //     //setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  //   } else {
+  //     setSelectedFilters([
+  //       ...selectedFilters,
+  //       { key: "guarantee", value: prizepool },
+  //     ]);
+  //   }
+  // };
+  //
+  // const setTournamentState = (state, e) => {
+  //   if (state === "null") {
+  //     setSelectedFilters(selectedFilters.filter(({ key }) => key !== "state"));
+  //
+  //     //setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  //   } else {
+  //     setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  //   }
+  // };
+  //
+  // const setEntrants = (value, e) => {
+  //   if (value === "null") {
+  //     setSelectedFilters(
+  //       selectedFilters.filter(({ key }) => key !== "currentEntrants")
+  //     );
+  //
+  //     //setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
+  //   } else {
+  //     setSelectedFilters([
+  //       ...selectedFilters,
+  //       { key: "currentEntrants", value: value },
+  //     ]);
+  //   }
+  // };
 
-  const setPrizePool = (prizepool) => {
-    setSelectedFilters([
-      ...selectedFilters,
-      { key: "guarantee", value: prizepool },
-    ]);
-  };
-
-  const setTournamentState = (state) => {
-    setSelectedFilters([...selectedFilters, { key: "state", value: state }]);
-  };
-
-  const setEntrants = (value) => {
-    setSelectedFilters([
-      ...selectedFilters,
-      { key: "currentEntrants", value: value },
-    ]);
+  const handleEvent = (value) => {
+    console.log(value);
   };
 
   return (
@@ -186,8 +376,8 @@ const FiltersForm = ({
               }}
               showCheckbox={true}
               placeholder="Select Networks"
-              onSelect={onSelect}
-              onRemove={onRemove}
+              onSelect={onSelectNetwork}
+              onRemove={onRemoveNetwork}
             />
           </Form.Group>
         </Col>
@@ -272,15 +462,10 @@ const FiltersForm = ({
               )}
             </OverlayTrigger>
 
-            <Form.Control
-              style={styles.basicInput}
-              as="select"
-              onChange={(e) => setGameTypeFilter(e.target.value)}
-            >
-              <option>Default select</option>
-              <option value="H">Hold'em</option>
-              <option value="O">Omaha</option>
-            </Form.Control>
+            <ReactMultiSelectCheckboxes
+              options={gameType}
+              onChange={(value) => onSelectGameType(value)}
+            />
           </Form.Group>
         </Col>
 
@@ -310,18 +495,22 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control
-              style={styles.basicInput}
-              as="select"
-              onChange={(e) => setPrizePool(e.target.value)}
-            >
-              <option>Default select</option>
-              <option value="100">$0 To $100</option>
-              <option value="1000">$100 To $1000</option>
-              <option value="5000">$1000 To $5000</option>
-              <option value="25000">$5000 To $25000</option>
-              <option value="100000">$25000 To $100000</option>
-            </Form.Control>
+            <ReactMultiSelectCheckboxes
+              style={{
+                dropdownButton: {
+                  color: "#6f7079",
+                  backgroundColor: "#2c2e3e",
+                  borderColor: "#6f7079",
+                  borderRadius: "3px",
+                  fontSize: "14px",
+                  marginTop: "10px",
+                  height: "40px",
+                  marginRight: "10px",
+                },
+              }}
+              options={prizepool}
+              onChange={(value) => onSelectprizepool(value)}
+            />
           </Form.Group>
         </Col>
 
@@ -351,11 +540,22 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control style={styles.basicInput} as="select">
-              <option>Select Speed</option>
-              <option>Slow</option>
-              <option>Turbo</option>
-            </Form.Control>
+            <ReactMultiSelectCheckboxes
+              style={{
+                dropdownButton: {
+                  color: "#6f7079",
+                  backgroundColor: "#2c2e3e",
+                  borderColor: "#6f7079",
+                  borderRadius: "3px",
+                  fontSize: "14px",
+                  marginTop: "10px",
+                  height: "40px",
+                  marginRight: "10px",
+                },
+              }}
+              options={speed}
+              onChange={(value) => onSelectSpeed(value)}
+            />
           </Form.Group>
         </Col>
         <Col md={4} lg={2}>
@@ -384,17 +584,11 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control
-              style={styles.basicInput}
-              as="select"
-              onChange={(e) => setTournamentState(e.target.value)}
-            >
-              <option>Select State</option>
-              <option value="Registering">Registering</option>
-              <option value="Late Registering">Late Registering</option>
-              <option value="Running">Running</option>
-              <option value="Completed">Completed</option>
-            </Form.Control>
+
+            <ReactMultiSelectCheckboxes
+              options={tournamentsStates}
+              onChange={(value) => onSelectState(value)}
+            />
           </Form.Group>
         </Col>
         <Col md={4} lg={2}>
@@ -423,18 +617,10 @@ const FiltersForm = ({
                 ></i>
               )}
             </OverlayTrigger>
-            <Form.Control
-              style={styles.basicInput}
-              as="select"
-              onChange={(e) => setEntrants(e.target.value)}
-            >
-              <option>Select</option>
-              <option value="50">10 - 50</option>
-              <option value="100">50 - 100</option>
-              <option value="200">100 - 200</option>
-              <option value="500">100 - 500</option>
-              <option value="1000">500 - 1000</option>
-            </Form.Control>
+            <ReactMultiSelectCheckboxes
+              options={enrollment}
+              onChange={(value) => handleEvent(value)}
+            />
           </Form.Group>
         </Col>
         <Col md={4} lg={2}>
@@ -470,6 +656,28 @@ const FiltersForm = ({
           </Form.Group>
         </Col>
       </Row>
+      <label style={{ color: "#FFF" }}> Selected Filters </label>
+      <Row style={{ marginBottom: "30px", width: "100%" }}>
+        <Col>
+          {showfilters.map((filter) => {
+            return (
+              <span style={styles.filterTag}>
+                {filter.label}{" "}
+                <i
+                  style={{
+                    marginLeft: "5px",
+                    marginRight: "5px",
+                    fontSize: "14px",
+                    color: "#FFF",
+                  }}
+                  class="fa fa-times-circle"
+                  aria-hidden="true"
+                />{" "}
+              </span>
+            );
+          })}
+        </Col>
+      </Row>
     </Form>
   );
 };
@@ -479,6 +687,25 @@ const styles = {
     backgroundColor: "#2c2e3e",
     border: "1px solid #363840",
   },
+  filterTag: {
+    backgroundColor: "#ffbb33",
+    color: "#fff",
+    width: "auto",
+    fontSize: "12px",
+    padding: "5px",
+    borderRadius: "3px",
+    marginRight: "10px",
+  },
+  dropDownBtn: {
+    color: "#6f7079",
+    backgroundColor: "#2c2e3e",
+    borderColor: "#6f7079",
+    borderRadius: "3px",
+    fontSize: "14px",
+    marginTop: "10px",
+    height: "40px",
+    marginRight: "10px",
+  },
   header: {
     color: "#ffbb33",
     textAlign: "center",
@@ -487,6 +714,7 @@ const styles = {
   mylabel: {
     fontSize: "14px",
     color: "#FFF",
+    marginBottom: "20px",
   },
 
   overlayGroup: {
