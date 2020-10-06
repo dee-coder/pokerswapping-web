@@ -7,6 +7,7 @@ import {
   Button,
   Spinner,
   Table,
+  Pagination,
 } from "react-bootstrap";
 import FiltersForm from "../forms/filteresForm";
 import NavBar from "../navbar/navbar";
@@ -51,6 +52,12 @@ const FindATournament = () => {
     { key: "scheduledStartDate", value: today },
   ]);
 
+  const [pagination, setPagination] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [startPaginationValues, setStartPaginationValues] = useState(0);
+  const [endPaginationValue, setEndPaginationValue] = useState(10);
+  const [pages, setPages] = useState([]);
+  const [activePage, setActivePages] = useState(1);
+
   const [gameType, setGameType] = useState(null);
 
   var urlNetwork =
@@ -58,6 +65,7 @@ const FindATournament = () => {
   useEffect(() => {
     setShowSpinner(true);
     setTournamentList([]);
+    var list = [];
 
     //data
     if (selectedNetwork.length == 0) {
@@ -90,11 +98,23 @@ const FindATournament = () => {
             setTournamentList(res.data.result);
             setNoData(false);
             setShowSpinner(false);
+            var lenght = res.data.result.length;
+            console.log(lenght);
+            var sets = lenght / 10;
+            console.log(sets);
+            var pagess = Math.ceil(sets);
+            console.log(pagess);
+            list = Array(pagess - 1 + 1)
+              .fill()
+              .map((_, idx) => 1 + idx);
+            //var list = Array.from(Array(pagess).keys());
           } else if (res.data.status === "failed") {
             setNoData(true);
 
             setShowSpinner(false);
           }
+          setPages(list);
+          console.log("Pages:", list);
 
           // console.log(res.data.result);
           // setShowSpinner(false);
@@ -144,6 +164,16 @@ const FindATournament = () => {
     return datum / 1000;
   }
 
+  const handlePaginationValue = (page) => {
+    setActivePages(page);
+    console.log(page);
+    setStartPaginationValues(activePage * 10);
+    console.log(startPaginationValues);
+
+    setEndPaginationValue(activePage * 10 + 10);
+    console.log(endPaginationValue);
+  };
+
   return (
     <div>
       <Container>
@@ -190,34 +220,70 @@ const FindATournament = () => {
             </Col>
           </Row>
           <Row>
-            <Col lg={10}>
+            <Col lg={8}>
               <span style={styles.resultFoundTag}>
                 {" "}
-                Showing {tournamentsList.length} Tournaments
+                {tournamentsList.length} Results
               </span>
             </Col>
-            <Col lg={2}>
-              <button
-                style={
-                  type === "table"
-                    ? styles.listViewTypeSelected
-                    : styles.listViewType
-                }
-                onClick={() => setType("table")}
-              >
-                <i class="fas fa-table"></i>
-              </button>
 
-              <button
-                style={
-                  type === "list"
-                    ? styles.listViewTypeSelected
-                    : styles.listViewType
-                }
-                onClick={() => setType("list")}
-              >
-                <i class="fas fa-stream"></i>
-              </button>
+            <Col lg={4}>
+              <div style={{ float: "right", marginRight: "30px" }}>
+                <button
+                  style={
+                    type === "table"
+                      ? styles.listViewTypeSelected
+                      : styles.listViewType
+                  }
+                  onClick={() => setType("table")}
+                >
+                  <i class="fas fa-table"></i>
+                </button>
+
+                <button
+                  style={
+                    type === "list"
+                      ? styles.listViewTypeSelected
+                      : styles.listViewType
+                  }
+                  onClick={() => setType("list")}
+                >
+                  <i class="fas fa-stream"></i>
+                </button>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={4}>
+              <span style={styles.resultFoundTag}>
+                {" "}
+                Showing {startPaginationValues} to {endPaginationValue}{" "}
+                Tournaments
+              </span>
+            </Col>
+            <Col lg={8}>
+              <Form inline style={{ float: "right", marginRight: "30px" }}>
+                <Button disabled style={styles.paginationItem}>
+                  Previous
+                </Button>
+                <Button style={styles.paginationItem}>Next</Button>
+
+                {pages.map((page) => {
+                  return (
+                    <Button
+                      style={
+                        activePage === page
+                          ? styles.activeItemPage
+                          : styles.paginationItem
+                      }
+                      onClick={() => handlePaginationValue(page)}
+                    >
+                      {" "}
+                      {page}
+                    </Button>
+                  );
+                })}
+              </Form>
             </Col>
           </Row>
           <Row>
@@ -270,9 +336,11 @@ const FindATournament = () => {
               )}
 
               {type === "list" &&
-                tournamentsList.map((tournament) => {
-                  return <TournamentItem obj={tournament} />;
-                })}
+                tournamentsList
+                  .slice(startPaginationValues, endPaginationValue)
+                  .map((tournament, index) => {
+                    return <TournamentItem obj={tournament} />;
+                  })}
             </Container>
           </Row>
         </Container>
@@ -287,6 +355,24 @@ const styles = {
     height: "100px",
 
     borderRadius: "3px",
+  },
+
+  paginationItem: {
+    background: "#2c2e3e",
+    color: "#FFF",
+    borderRadius: "0px",
+    borderColor: "#363840",
+    width: "auto",
+    outlineShadow: "none",
+    height: "40px",
+  },
+  activeItemPage: {
+    background: "#ffbb33",
+    color: "#FFF",
+    borderRadius: "0px",
+    borderColor: "#ffbb33",
+    width: "auto",
+    height: "40px",
   },
   tournamentSection: {
     width: "100%",
@@ -356,8 +442,10 @@ const styles = {
     width: "35px",
     borderRadius: "4px",
     textAlign: "center",
-    margin: "10px",
+    marginLeft: "10px",
     border: "1px solid #363840",
+    marginTop: "10px",
+    marginBottom: "10px",
     float: "right",
     "&:hover": {
       cursor: "pointer",
@@ -373,7 +461,9 @@ const styles = {
 
     borderRadius: "4px",
     border: "1px solid #ffbb22",
-    margin: "10px",
+    marginLeft: "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
 
     textAlign: "center",
     "&:hover": {
@@ -384,6 +474,9 @@ const styles = {
     color: "#FFF",
     fontSize: "18px",
     fontWeight: "600",
+  },
+  pagination: {
+    backgroundColor: "#ffbb22",
   },
 };
 

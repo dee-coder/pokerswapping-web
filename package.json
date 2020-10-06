@@ -19,8 +19,10 @@
     "react-bootstrap-multiselect": "^2.4.1",
     "react-datepicker": "^3.2.2",
     "react-dom": "^16.13.1",
+    "react-js-pagination": "^3.0.3",
     "react-multiselect-checkboxes": "^0.1.1",
     "react-multiselect-dropdown-bootstrap": "^1.0.11",
+    "react-paginate": "^6.5.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3"
   },
