@@ -16,8 +16,41 @@ import axios from "axios";
 import JsonUrl from "../apiUrl.json";
 import TournamentItem from "../components/tournamentItem";
 import "./pages.css";
+import { useLocation, useParams } from "react-router-dom";
+import qs from "qs";
 
-const FindATournament = () => {
+const FindATournament = (props) => {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = mm + "/" + dd + "/" + yyyy;
+  const [selectedFilters, setSelectedFilters] = useState([]);
+  //{ key: "scheduledStartDate", value: today }
+
+  const { date } = useParams();
+  const queries = qs.parse(props.location.search, {
+    ignoreQueryPrefix: true,
+  });
+
+  const [allFilters, setAllFilters] = useState([]);
+
+  console.log(allFilters);
+
+  // const setCustomDateFilter = () => {
+  //   if (date !== null || date !== undefined) {
+  //     setAllFilters([
+  //       ...allFilters,
+  //       { key: "scheduledStartDate", value: date.replace(/-/g, "/") },
+  //     ]);
+  //     console.log(date.replace(/-/g, "/"));
+  //   }
+  // };
+
+  //const parsed = qs.parse(params);
+  console.log(props.match);
+  //console.log(parsed.network);
   const [tournamentsList, setTournamentList] = useState([]);
   const [network, setNetwork] = useState([
     { name: "partypoker", key: "1" },
@@ -29,15 +62,6 @@ const FindATournament = () => {
   const [selectedNetwork, setSelectedNetwork] = useState([
     { name: "partypoker", key: "1" },
   ]);
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, "0");
-  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = today.getFullYear();
-
-  today = mm + "/" + dd + "/" + yyyy;
-
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  //{ key: "scheduledStartDate", value: today }
 
   const [tournamentId, setTournamentId] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
@@ -53,9 +77,6 @@ const FindATournament = () => {
   const [selectedSpeed, setSelectedSpeed] = useState([]);
   const [selectedTournamentsState, setSelectedTournamentsState] = useState([]);
   const [selectedEnrollment, setSelectedEnrollment] = useState([]);
-  const [allFilters, setAllFilters] = useState([
-    { key: "scheduledStartDate", value: today },
-  ]);
 
   const [pagination, setPagination] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   const [startPaginationValues, setStartPaginationValues] = useState(0);
@@ -63,6 +84,9 @@ const FindATournament = () => {
   const [pages, setPages] = useState([]);
   const [activePage, setActivePages] = useState(1);
   const [showNetworkModal, setShowNetworkModal] = useState(false);
+  const [paramsDate, setParamsDate] = useState([
+    { key: "scheduledStartDate", value: date.replace(/-/g, "/") },
+  ]);
 
   const [gameType, setGameType] = useState(null);
 
@@ -121,6 +145,7 @@ const FindATournament = () => {
           }
           setPages(list);
           console.log("Pages:", list);
+          //setCustomDateFilter();
 
           // console.log(res.data.result);
           // setShowSpinner(false);
@@ -136,7 +161,7 @@ const FindATournament = () => {
           console.log(error);
         });
     }
-  }, [selectedNetwork, allFilters]);
+  }, [allFilters]);
 
   function convertTimeDate(timestamp) {
     var theDate = new Date(timestamp * 1000);
@@ -271,6 +296,8 @@ const FindATournament = () => {
                 selectedCustomId={selectedCustomId}
                 setSelectedCustomId={setSelectedCustomId}
                 getASpacifiMatchById={getASpacifiMatchById}
+                paramsDate={paramsDate}
+                setParamsDate={setParamsDate}
               />
             </Col>
           </Row>

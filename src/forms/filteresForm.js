@@ -77,6 +77,8 @@ const FiltersForm = ({
   setSelectedCustomId,
   selectedCustomId,
   getASpacifiMatchById,
+  paramsDate,
+  setParamsDate,
 }) => {
   useEffect(() => {
     //setSelectedNetwork([...networks,network])
@@ -93,6 +95,7 @@ const FiltersForm = ({
 
     today = mm + "/" + dd + "/" + yyyy;
     setShowFilters([
+      ...paramsDate,
       ...selectedPrizepool,
       ...selectedGameType,
       ...selectedSpeed,
@@ -101,6 +104,7 @@ const FiltersForm = ({
     ]);
 
     setAllFilters([
+      ...paramsDate,
       ...selectedPrizepool,
       ...selectedGameType,
       ...selectedSpeed,

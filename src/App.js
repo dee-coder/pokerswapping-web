@@ -15,6 +15,16 @@ function App() {
         <Route path="/signup" component={SignupPage} />
         <Route path="/signin" component={SigninPage} />
         <Route path="/findatournament" component={FindATournament} />
+        <Route
+          path="/findatournament/filters?"
+          exact={true}
+          component={FindATournament}
+        />
+        <Route
+          exact={true}
+          path="/upcoming-tournaments/:date"
+          component={FindATournament}
+        />
       </Switch>
     </main>
   );
