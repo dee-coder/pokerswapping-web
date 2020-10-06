@@ -74,6 +74,9 @@ const FiltersForm = ({
   setSelectedEnrollment,
   allFilters,
   setAllFilters,
+  setSelectedCustomId,
+  selectedCustomId,
+  getASpacifiMatchById,
 }) => {
   useEffect(() => {
     //setSelectedNetwork([...networks,network])
@@ -412,10 +415,12 @@ const FiltersForm = ({
                 <Form.Control
                   style={styles.findTournamentTitleBox}
                   placeholder="e.g. Texas hold 'em., ID:2386389399 "
-                  // onChange={(e) => setTournamentId(e.target.value)}
+                  value={selectedCustomId}
+                  onChange={(e) => setSelectedCustomId(e.target.value)}
                 />
 
                 <Button
+                  onClick={(e) => getASpacifiMatchById(e)}
                   style={styles.searchBtn}
                   //onClick={(e) => getASpacifiMatchById(e)}
                 >

@@ -8,6 +8,7 @@ import {
   Spinner,
   Table,
   Pagination,
+  Modal,
 } from "react-bootstrap";
 import FiltersForm from "../forms/filteresForm";
 import NavBar from "../navbar/navbar";
@@ -38,10 +39,14 @@ const FindATournament = () => {
   const [selectedFilters, setSelectedFilters] = useState([]);
   //{ key: "scheduledStartDate", value: today }
 
-  const [tournamentId, setTournamentId] = useState("");
+  const [tournamentId, setTournamentId] = useState(null);
   const [showSpinner, setShowSpinner] = useState(false);
   const [noData, setNoData] = useState(false);
   const [type, setType] = useState("list");
+  const [selectedNetworkForCustomId, setSelectedNetworkForCustomId] = useState(
+    null
+  );
+  const [selectedCustomId, setSelectedCustomId] = useState();
 
   const [selectedPrizepool, setSelectedPrizePool] = useState([]);
   const [selectedGameType, setSelectedGameType] = useState([]);
@@ -54,9 +59,10 @@ const FindATournament = () => {
 
   const [pagination, setPagination] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   const [startPaginationValues, setStartPaginationValues] = useState(0);
-  const [endPaginationValue, setEndPaginationValue] = useState(10);
+  const [endPaginationValue, setEndPaginationValue] = useState(30);
   const [pages, setPages] = useState([]);
   const [activePage, setActivePages] = useState(1);
+  const [showNetworkModal, setShowNetworkModal] = useState(false);
 
   const [gameType, setGameType] = useState(null);
 
@@ -100,7 +106,7 @@ const FindATournament = () => {
             setShowSpinner(false);
             var lenght = res.data.result.length;
             console.log(lenght);
-            var sets = lenght / 10;
+            var sets = lenght / 30;
             console.log(sets);
             var pagess = Math.ceil(sets);
             console.log(pagess);
@@ -140,18 +146,30 @@ const FindATournament = () => {
 
   const getASpacifiMatchById = (e) => {
     e.preventDefault();
-    if (network === null || tournamentId === null) {
-      console.log("Spacify all params.");
+    if (selectedNetworkForCustomId === null) {
+      //alert("Spacify all params.");
+      setShowNetworkModal(true);
     } else {
-      setTournamentList([]);
+      setShowNetworkModal(false);
+
+      //setTournamentList([]);
       setShowSpinner(true);
       axios
-        .post(JsonUrl.getTournamentById, { id: tournamentId, network: network })
+        .get(
+          JsonUrl.baseUrl +
+            JsonUrl.getTournamentById +
+            "?id=" +
+            selectedCustomId +
+            "&network=" +
+            selectedNetworkForCustomId
+        )
         .then((res) => {
           console.log("Axios Response:", res);
-          setShowSpinner(false);
 
-          setTournamentList([res.data.result.ActiveTournament]);
+          setTournamentList([]);
+
+          setTournamentList([res.data.result]);
+          setShowSpinner(false);
         })
         .catch((err) => {
           console.log("Axios Error:", err);
@@ -177,6 +195,40 @@ const FindATournament = () => {
   return (
     <div>
       <Container>
+        <Modal
+          show={showNetworkModal}
+          onHide={() => setShowNetworkModal(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Select Network </Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Select Network of Tournament</p>
+            <select
+              type="option"
+              onChange={(e) => setSelectedNetworkForCustomId(e.target.value)}
+            >
+              <option value="skypoker">SkyPoker</option>
+              <option value="partypoker">PartyPoker</option>
+              <option value="888poker">888Poker</option>
+              <option value="pokerstars">PokerStars</option>
+              <option value="fullfilt">fullfilt</option>
+            </select>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={(e) => setShowNetworkModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={(e) => getASpacifiMatchById(e)}>
+              Proceed
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <NavBar />
         <Container>
           <Row>
@@ -216,6 +268,9 @@ const FindATournament = () => {
                 setSelectedEnrollment={setSelectedEnrollment}
                 setAllFilters={setAllFilters}
                 allFilters={allFilters}
+                selectedCustomId={selectedCustomId}
+                setSelectedCustomId={setSelectedCustomId}
+                getASpacifiMatchById={getASpacifiMatchById}
               />
             </Col>
           </Row>
@@ -316,21 +371,23 @@ const FindATournament = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {tournamentsList.map((tournament) => {
-                      return (
-                        <tr>
-                          <td>{tournament["sharkscope_id"]}</td>
-                          <td>{tournament["scheduledStartDate"]}</td>
-                          <td>{tournament["network"]}</td>
-                          <td>{tournament["name"]}</td>
-                          <td>{tournament["currency"]}</td>
-                          <td>{tournament["guarantee"]}</td>
-                          <td>{tournament["overlay"]}</td>
-                          <td>{tournament["totalEntrants"]}</td>
-                          <td>{tournament["state"]}</td>
-                        </tr>
-                      );
-                    })}
+                    {tournamentsList
+                      .slice(startPaginationValues, endPaginationValue)
+                      .map((tournament) => {
+                        return (
+                          <tr>
+                            <td>{tournament["sharkscope_id"]}</td>
+                            <td>{tournament["scheduledStartDate"]}</td>
+                            <td>{tournament["network"]}</td>
+                            <td>{tournament["name"]}</td>
+                            <td>{tournament["currency"]}</td>
+                            <td>{tournament["guarantee"]}</td>
+                            <td>{tournament["overlay"]}</td>
+                            <td>{tournament["totalEntrants"]}</td>
+                            <td>{tournament["state"]}</td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </Table>
               )}
