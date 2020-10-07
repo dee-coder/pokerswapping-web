@@ -17,7 +17,6 @@ import JsonUrl from "../apiUrl.json";
 import TournamentItem from "../components/tournamentItem";
 import "./pages.css";
 import { useLocation, useParams } from "react-router-dom";
-import qs from "qs";
 
 const FindATournament = (props) => {
   var today = new Date();
@@ -29,10 +28,9 @@ const FindATournament = (props) => {
   const [selectedFilters, setSelectedFilters] = useState([]);
   //{ key: "scheduledStartDate", value: today }
 
-  const { date } = useParams();
-  const queries = qs.parse(props.location.search, {
-    ignoreQueryPrefix: true,
-  });
+  // const queries = qs.parse(props.location.search, {
+  //   ignoreQueryPrefix: true,
+  // });
 
   const [allFilters, setAllFilters] = useState([]);
 
@@ -84,9 +82,6 @@ const FindATournament = (props) => {
   const [pages, setPages] = useState([]);
   const [activePage, setActivePages] = useState(1);
   const [showNetworkModal, setShowNetworkModal] = useState(false);
-  const [paramsDate, setParamsDate] = useState([
-    { key: "scheduledStartDate", value: date.replace(/-/g, "/") },
-  ]);
 
   const [gameType, setGameType] = useState(null);
 
@@ -296,8 +291,6 @@ const FindATournament = (props) => {
                 selectedCustomId={selectedCustomId}
                 setSelectedCustomId={setSelectedCustomId}
                 getASpacifiMatchById={getASpacifiMatchById}
-                paramsDate={paramsDate}
-                setParamsDate={setParamsDate}
               />
             </Col>
           </Row>
